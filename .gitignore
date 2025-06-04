@@ -1,0 +1,27 @@
+# Node
+node_modules/
+dist/
+.env
+npm-debug.log*
+
+# Docker
+*.local
+docker-compose.override.yml
+
+# Logs
+logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Mac
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+
+# Se o código está dentro da pasta "app/"
+app/node_modules/
+app/dist/
+app/*.env
