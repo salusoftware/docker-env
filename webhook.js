@@ -14,6 +14,7 @@ app.post('/webhook', (req, res) => {
             res.send('✅ Deploy executado');
         });
     } else {
+
         res.status(200).send('Branch ignorada');
     }
 });
