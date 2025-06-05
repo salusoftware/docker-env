@@ -1,12 +1,17 @@
-# Etapa 1: build da aplicação
+# Etapa 1: build
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY app/package*.json ./
-RUN npm install
+# Copia arquivos da raiz
+COPY package*.json ./
+COPY tsconfig*.json ./
+COPY nest-cli.json ./
 
-COPY app .
+# Copia o código do app
+COPY app ./app
+
+RUN npm install
 RUN npm run build
 
 # Etapa 2: produção
@@ -15,7 +20,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
+COPY package*.json ./
 RUN npm install --production
 
 EXPOSE 3000
