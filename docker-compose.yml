@@ -1,7 +1,7 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  app:
+  nestjs-app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,19 +9,17 @@ services:
     ports:
       - "3000:3000"
     restart: always
+    depends_on:
+      - mysql
 
   mysql:
     image: mysql:8.0
     container_name: mysql
+    restart: always
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: assistant
-      MYSQL_USER: root
-      MYSQL_PASSWORD: Renan@1211
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-volumes:
-  mysql_data:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: secret

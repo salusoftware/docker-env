@@ -1,24 +1,27 @@
+# Etapa 1 - Build
 FROM node:20-alpine AS builder
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
+# Copia somente os arquivos essenciais para build
 COPY app/package*.json ./
 COPY app/nest-cli.json ./
 COPY app/tsconfig*.json ./
 COPY app/src ./src
-COPY app/migrations ./migrations
-COPY app/typeOrm.config.ts ./
 
+# Instala dependências e compila
 RUN npm install
-RUN npm run build && ls -la dist
+RUN npm run build
 
+# Etapa 2 - Produção
 FROM node:20-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/dist ./dist
+# Copia apenas o resultado da build
+COPY --from=builder /usr/src/app/dist ./dist
 COPY app/package*.json ./
-RUN npm install --production
 
-EXPOSE 3000
+RUN npm install --omit=dev
+
 CMD ["node", "dist/main"]
