@@ -44,17 +44,15 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma
     container_name: uptime-kuma
+    network_mode: "host"
     volumes:
       - ./uptime-kuma:/app/data
-    ports:
-      - "3001:3001"
     restart: always
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
-    ports:
-      - "8080:8080"
+    network_mode: "host"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -65,9 +63,8 @@ services:
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
+    network_mode: "host"
     restart: always
-    ports:
-      - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer-data:/data
