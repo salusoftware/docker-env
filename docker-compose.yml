@@ -1,13 +1,17 @@
 services:
   nginx:
     image: nginx:alpine
-    network_mode: "host"
     container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - nestjs-app
+    networks:
+      - app-network
 
   nestjs-app:
     build:
@@ -44,30 +48,33 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma
     container_name: uptime-kuma
-    network_mode: "host"
     volumes:
       - ./uptime-kuma:/app/data
+    networks:
+      - app-network
     restart: always
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
-    network_mode: "host"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - app-network
     restart: always
 
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
-    network_mode: "host"
-    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer-data:/data
+    networks:
+      - app-network
+    restart: always
 
 networks:
   app-network:
