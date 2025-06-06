@@ -10,8 +10,6 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - nestjs-app
-    networks:
-      - app-network
   nestjs-app:
     build:
       context: .
